@@ -10,15 +10,14 @@ The users of this initiative will be Government of Canada employees deploying cl
 # Background
 
 The Azure Landing Zone Base Cloud Architecture **(LZBCA)** is an initiative that is led by Cloud Product Management & Services - Research & Development team. 
+
+The Azure LZBCA is a fully functional Virtual Data Centre (VDC) with what is believed to have all the necessary components required to meet the Cloud PBMM Security profile through Infrastructure as Code (IaC). It aligns with Cloud Usage Profile 3 with a future design for Cloud Usage Profiles 5 & 6.  We will be starting our Security Assessment (SA) on the environment in June 2020. 
   
-The Azure LZBCA is a fully functional Virtual Data Centre (VDC) with all the necessary components required to meet the Cloud PBMM Security profile. It aligns with Cloud Usage Profile 3 with a future design for Cloud Usage Profiles 5 & 6. 
 * For Network details See [Network Architecture](Network/README.md)
 * For Routing details See [Routing and Flow Control Overview](Network/Routing_Overview.md)
 * For Application Dataflow details see [Application Dataflow - HA and AzLB](Network/Application_Dataflow_-_HA_and_AzLB.md)
 
 It has been designed to enable departments to leverage and quickly deploy an Azure Landing Zone that aligns with a departments naming standards and IP blocks.
-
-We will be starting our Security Assessment (SA) on the environment in June 2020. 
 
 Development of the Azure LZBAC will continue to add functionality for components such as: SCED, AD, RBAC and etc., this development will move forward in parallel with the SA process. For a complete list of current and future development "Available Today" and "Future Releases" below.
 
@@ -80,8 +79,9 @@ Resource groups, virtual and sub networks, peering and user defined routing, Vir
 2. Managed Service available to help deploy an Azure Landing Zone with aligned naming standards and IP blocks.
 3. Azure Naming and Tagging Standards
 4. 30-Day Guardrail Implementation Guide
-5. Reporting tool
-6. Deploys a Local Active Directory (azure.local)
+5. 30-Day Guardrails Applied (Technical GR only)
+6. Reporting tool
+7. Deploys a Local Active Directory (azure.local)
 
 
 # **Future Releases**
@@ -140,12 +140,10 @@ Les utilisateurs de cette initiative seront des employés du gouvernement du Cana
 # Contexte
 
 L'AIZDB est une initiative dirigée par la direction des services et de la gestion des produits infonuagiques- Équipe de recherche et développement.
-  
-L’AIZDB est un centre de données virtuel (VDC) entièrement fonctionnel avec toutes les composants nécessaires pour répondre au profil de sécurité protégé B. Il s'aligne sur le profil d'utilisation infonuagique 3 dè avec une vision vers le future pour les profils d'utilisation infonuagique 5 et 6.
+
+L’AIZDB est un centre de données virtuel (CDV) entièrement fonctionnel doté de toutes les composantes nécessaires pour rencontrer le profil de sécurité infonuagique PBMM via une infrastructure déployable par Code (IaC). Il s'aligne sur le profil d'utilisation infonuagique 3 avec une conception future qui tiens compte des profils d'utilisation infonuagique 5 et 6. Nous commencerons notre évaluation de la sécurité (SA) sur l'environnement en juin 2020.
 
 Il a été conçu pour permettre aux partenaires de déployer rapidement une zone d'atterrissage Azure qui s'aligne sur les normes de dénomination et les blocs d’addresses IP d'un partenaire.
-
-Nous commencerons notre évaluation de la sécurité  de l'environnement en juin 2020.
 
 Le développement d'AAIZDB continuera à ajouter des fonctionnalités pour des composantes tels que: SCED, AD, RBAC et etc.. Ce développement se fera en parallèle avec le processus d’évaluation de la sécurité. Pour une liste complète des fonctionnalités en développements actuels et futurs, voir les sections "Available Today – Disponible auhourd’hui" et "Future Releases – Prochaines versions" ci-dessous.
 
@@ -207,8 +205,9 @@ Groupes de ressources, réseaux virtuels et sous-réseaux, homologation et routage
 2. Service géré disponible pour aider à déployer une zone d'atterrissage Azure avec des normes de dénomination alignées et des blocs IP.
 3. Normes de nommage et d'étiquetage Azure
 4. Guide de mise en œuvre de garde-corps de 30 jours
-5. Outil de rapports
-6. Déploie un répertoire AD local (azure.local)
+5. Garde-corps de 30 jours appliqués (GR technique uniquement)
+6. Outil de rapports
+7. Déploie un répertoire AD local (azure.local)
 
 # ** Versions futures **
 1. Outil d'automatisation de la conformité des garde-corps de 30 jours (r2c)
