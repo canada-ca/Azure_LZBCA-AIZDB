@@ -152,7 +152,7 @@ ______________________
 
 ## Comment contribuer
 
-Voir [CONTRIBUTING.md] (CONTRIBUTING.md)
+Voir [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Licence
 
@@ -166,14 +166,14 @@ ______________________
 
 Le pipeline de code commence par une feuille de calcul de configuration d'entrée VDC, qui est utilisée pour créer un fichier de contrôle qui est ingéré par un script PowerShell pour créer tous les fichiers Terraform «* ??.tf» nécessaires pour déployer un VDC.
 
-! [Diagramme] (Ressources / code-pipeline.png)
+![Diagram](Resources/code-pipeline.png)
 
 ## VDC Configuration Spreadsheet définit les valeurs suivantes
 Groupes de ressources, réseaux virtuels et sous-réseaux, homologation et routage défini par l'utilisateur, machines virtuelles + ensembles de disponibilité, contrôleur de domaine Windows, pare-feu Fortinet HA, équilibreur de charge F5 / Azure HA, application Azure SDN, espace de travail d'analyse des journaux, cartes réseau + Ips publiques temporaires [config et licences], groupes de sécurité réseau, Azure Security Center [+ activation de l'abonnement]
 
 # Feuille de route pour le développement futur
 
-! [Diagramme] (Ressources / azure-roadmap.png)
+![Diagram](Resources/azure-roadmap.png)
 
 # **Disponible aujourd'hui**
 1. Azure LZBCA r2b = VDC entièrement fonctionnel
