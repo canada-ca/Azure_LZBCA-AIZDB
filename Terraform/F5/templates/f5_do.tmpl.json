@@ -1,0 +1,149 @@
+{
+    "schemaVersion": "1.12.0",
+    "class": "Device",
+    "async": true,
+    "label": "F5 VM onboarding",
+    "Common": {
+        "class": "Tenant",
+        "hostname": "${local_host}.${domainname}",
+	    "myLicense": {
+            "class": "License",
+            "licenseType": "regKey",
+            "regKey": "${regkey}"
+        },
+        "dbvars": {
+            "class": "DbVariables",
+            "config.allow.rfc3927": "enable",
+            "ui.advisory.enabled": true,
+            "ui.advisory.color": "${banner_color}",
+            "ui.advisory.text": "/Common/hostname"
+        },
+        "myDns": {
+            "class": "DNS",
+            "nameServers": [
+                "${dns_server1}",
+                "${dns_server2}"
+            ],
+            "search": [
+                "${domainname}"
+            ]
+        },
+        "myNtp": {
+            "class": "NTP",
+            "servers": [
+                "${ntp_server}",
+                "0.pool.ntp.org",
+                "1.pool.ntp.org"
+            ],
+            "timezone": "${timezone}"
+        },
+        "myProvisioning": {
+            "class": "Provision",
+            "ltm": "nominal",
+            "apm": "nominal",
+            "asm": "nominal",
+            "afm": "nominal",
+            "avr": "nominal",
+            "ilx": "nominal"
+        },
+        "external": {
+            "class": "VLAN",
+            "tag": 1000,
+            "mtu": 1500,
+            "interfaces": [
+                {
+                    "name": "1.1",
+                    "tagged": false
+                }
+            ]
+        },
+        "external-self": {
+            "class": "SelfIp",
+            "address": "${local_selfip1}/24",
+            "vlan": "external",
+            "allowService": "default",
+            "trafficGroup": "traffic-group-local-only"
+        },
+        "internal": {
+            "class": "VLAN",
+            "tag": 1001,
+            "mtu": 1500,
+            "interfaces": [
+                {
+                    "name": "1.2",
+                    "tagged": false
+                }
+            ]
+        },
+        "internal-self": {
+            "class": "SelfIp",
+            "address": "${local_selfip2}/24",
+            "vlan": "internal",
+            "allowService": "default",
+            "trafficGroup": "traffic-group-local-only"
+        },
+        "defaultRoute": {
+            "class": "Route",
+            "gw": "${gateway}",
+            "network": "default",
+            "mtu": 1500
+        },
+        "int_PROD_Route": {
+            "class": "Route",
+            "gw": "${int_p_gateway}",
+            "network": "${int_p_cidr}",
+            "mtu": 1500
+        },
+        "int_DEV_Route": {
+            "class": "Route",
+            "gw": "${int_d_gateway}",
+            "network": "${int_d_cidr}",
+            "mtu": 1500
+        },
+        "int_MRZ_Route": {
+            "class": "Route",
+            "gw": "${int_p_gateway}",
+            "network": "${int_m_cidr}",
+            "mtu": 1500
+        },
+        "paz_PROD_Route": {
+            "class": "Route",
+            "gw": "${int_gateway}",
+            "network": "${paz_p_cidr}",
+            "mtu": 1500
+        },
+        "paz_DEV_Route": {
+            "class": "Route",
+            "gw": "${int_gateway}",
+            "network": "${paz_d_cidr}",
+            "mtu": 1500
+        },
+        "configsync": {
+	    "class": "ConfigSync",
+    	    "configsyncIp": "/Common/internal-self/address"
+	    },
+	    "failoverAddress": {
+    	    "class": "FailoverUnicast",
+    	    "address": "/Common/internal-self/address"
+	    },
+	    "failoverGroup": {
+	        "class": "DeviceGroup",
+	        "type": "sync-failover",
+	        "members": ["${host1}.${domainname}", "${host2}.${domainname}"],
+	        "owner": "/Common/failoverGroup/members/0",
+	        "autoSync": true,
+	        "saveOnAutoSync": false,
+	        "networkFailover": true,
+	        "fullLoadOnSync": false,
+	        "asmSync": false
+	    },
+	    "trust": {
+	        "class": "DeviceTrust",
+	        "localUsername": "${admin_user}",
+	        "localPassword": "${admin_pass}",
+	        "remoteHost": "${remote_selfip}",
+	        "remoteUsername": "${admin_user}",
+	        "remotePassword": "${admin_pass}"
+	    }
+    }
+}

@@ -1,0 +1,1 @@
+﻿[Convert]::ToBase64String((Get-Content "<image source>" -Encoding Byte))

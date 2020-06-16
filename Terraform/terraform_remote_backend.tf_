@@ -1,0 +1,8 @@
+﻿terraform {
+backend "azurerm" {
+storage_account_name  = lzpccsalzstore
+container_name  = lzpccsalz
+key                   = "azure_terraform.tfstate"
+access_key            = "t3qbsTcK9h9um2qjL04khkDtLrDaCx1d9hp5ViZd1u2bGYJ0bCMVw0OY0WzoXvHctg0YiOt6BD3qDsXjvpv9+g=="
+}
+}

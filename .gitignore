@@ -1,0 +1,14 @@
+terraform/.terraform
+terraform/terraform.tfstate
+terraform/*.lic
+terraform/terraform.tfstate.backup
+terraform/F5/.terraform
+terraform/F5/terraform.tfstate
+terraform/F5/*.lic
+terraform/F5/terraform.tfstate.backup
+terraform/F5/Files/*
+terraform/FG/.terraform
+terraform/FG/terraform.tfstate
+terraform/FG/*.lic
+terraform/FG/terraform.tfstate.backup
+terraform/FG/config.tf

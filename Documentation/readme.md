@@ -1,0 +1,3 @@
+#Technical Documentation
+* [Azure_Guardrail_Implementation_Guide](guardrails/Azure_Guardrail_Implementation_Guide.pdf)
+* [LandingZone_BaseCloudArchitectureInstructions](terraform/LandingZone_BaseCloudArchitectureInstructions.pdf)

@@ -1,0 +1,61 @@
+{
+    "class": "AS3",
+    "action": "deploy",
+    "persist": true,
+    "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.16.0",
+        "id": "SRA",
+        "label": "ZeroTrust-Secure-Remote-Access",
+        "remark": "ZeroTrust Webtop, RDP Proxy Gateway, WebSSH Proxy and SSL VPN",
+        "controls": {
+            "trace": true
+        },
+        "SRA": {
+            "class": "Tenant",
+            "SRA_Webtop": {
+                "class": "Application",
+                "template": "https",
+                "serviceMain": {
+                    "class": "Service_HTTPS",
+                    "remark": "SRA_Webtop Main",
+                    "virtualAddresses": [
+                        { "bigip": "/Common/Shared/wildcardAddress" }
+                    ],
+                    "virtualPort": 443,
+                    "snat": "none",
+                    "profileHTTP": {
+                        "use": "webtop_http"
+                    },
+                    "clientTLS": {
+                        "bigip": "/Common/serverssl-insecure-compatible"
+                    },
+                    "serverTLS": "webtop_clientssl"
+                },
+                "webtop_http": {
+                    "class": "HTTP_Profile",
+                    "requestChunking": "rechunk",
+                    "responseChunking": "unchunk",
+                    "hstsInsert": true,
+                    "hstsPreload": true
+                },
+                "webtop_clientssl": {
+                    "certificates": [
+                        {
+                            "certificate": "Wildcard_certificate"
+                        }
+                    ],
+                    "ciphers": "DEFAULT",
+                    "requireSNI": false,
+                    "class": "TLS_Server"
+                },
+                "Wildcard_certificate": {
+                    "class": "Certificate",
+                    "remark": "in practice we recommend using a passphrase",
+                    "certificate": "-----BEGIN CERTIFICATE-----\nMIIDtTCCAp2gAwIBAgIBAzANBgkqhkiG9w0BAQsFADBGMQswCQYDVQQGEwJVUzET\nMBEGA1UECAwKQ2FsaWZvcm5pYTESMBAGA1UECgwJTXlDb21wYW55MQ4wDAYDVQQD\nDAVsYWJDQTAeFw0xOTA0MjUyMzM3NDVaFw0yOTA0MjIyMzM3NDVaMF8xCzAJBgNV\nBAYTAkNBMRAwDgYDVQQIEwdPbnRhcmlvMRQwEgYDVQQKEwtGNSBOZXR3b3JrczEO\nMAwGA1UECxMFU2FsZXMxGDAWBgNVBAMTD3dlYnRvcC5mNXNlLmNvbTCCASIwDQYJ\nKoZIhvcNAQEBBQADggEPADCCAQoCggEBAO6mWzsOY0UuRzSiVU65gmlSit4d7tW4\nE/kWYY3LT/dxG2V/kzHhO70amNCTDVv5oAKkToLYCdJNWWxEI+EgUigDtg/v4E1R\nH0KEQdGC6RHnYK8kOmWWm9Pminh1P1o03QiJ41zj5KcyFYJq4pFRctN5iPs0+F/Y\n5JBDbPcnuk3OuRLxI67tPwqAQQurXcvGzCYF1y1zxlHxxWyUbuTdCo3GeO2Vo3bN\nMSTSj9hmxc8QEXif1qA/KDnLtY+IemptJT5aC0WZRwp2lncKOpSLcMcdQAprxHYA\n6LLkztNqVwCXQFjA7zfVRXV63JGhjV+oR4O8yemLffUVydihXzcsruMCAwEAAaOB\nlDCBkTAJBgNVHRMEAjAAMB0GA1UdDgQWBBRjzhMuUopHVdDvj9xvCskIPacvQzAf\nBgNVHSMEGDAWgBQMgRSSF2oS8RCZJADBj3YSv90EsTAOBgNVHQ8BAf8EBAMCBeAw\nNAYDVR0lAQH/BCowKAYIKwYBBQUHAwIGCCsGAQUFBwMBBggrBgEFBQcDAwYIKwYB\nBQUHAwQwDQYJKoZIhvcNAQELBQADggEBAKxtUE9tImn6MF0E2RNYeaTkIyCozjPw\nARofuW4eE5VKoZyq8JCbzUG44yT8gCSAj24LYuM7mk9CceHpu4pSyLHuptP1W8ZT\nzpy4BPHaeFoJZCgBW8KkOdlW/4WRTmbfG3YaxPClOj7f5P4Tkw2XaftPJqQWZnCx\npEBU8e5AVOSmV1/vkhEi5FjV1aCXEm2DH9TJQtxABKGCaNtwnS701mmJH0HWlDSm\nMyBI/jTOO2XMoWGEzL9pIMiPPGZZbGWUIfvfhsgBFnJoSUa9ijteR5CLhX7DIfAl\njuMTHgWmsN80SOIEUaLYNfeFQxkgL0uVc8nzc3JGN+78h+Ktg4piRCM=\n-----END CERTIFICATE-----",
+                    "privateKey": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDupls7DmNFLkc0\nolVOuYJpUoreHe7VuBP5FmGNy0/3cRtlf5Mx4Tu9GpjQkw1b+aACpE6C2AnSTVls\nRCPhIFIoA7YP7+BNUR9ChEHRgukR52CvJDpllpvT5op4dT9aNN0IieNc4+SnMhWC\nauKRUXLTeYj7NPhf2OSQQ2z3J7pNzrkS8SOu7T8KgEELq13LxswmBdctc8ZR8cVs\nlG7k3QqNxnjtlaN2zTEk0o/YZsXPEBF4n9agPyg5y7WPiHpqbSU+WgtFmUcKdpZ3\nCjqUi3DHHUAKa8R2AOiy5M7TalcAl0BYwO831UV1etyRoY1fqEeDvMnpi331FcnY\noV83LK7jAgMBAAECggEAE06WFuMFGPWzgQiZCjNr34V0AqA9UEECLKao4cXPBF+8\nLavyhpiIMrZSIp2i+Qvq7AvK5j8AHGlxkJa6qF3rB521PvjTFq43bzQv9vk2TeKA\nKesuZkWW+b+u+CvUIkIgl65AHKW7O+OLZe+rwMHsHju430nbxjVP2HP7/srSAbVN\nt3yyXPmI4VSB2P8NzkYCzr/B46LcS/2OBno9iwjQwDspQNJhpUmxPsFfG0OS0WWh\nqLgpUvG8GEPkCv8fRjjrqh9iJ3kZOpmv5nQ1OE0ypwYoPhJDiJAAZiXRtPImoM06\n2M6CbvtdunRuVvVNBYgu75jRgunZycQJP48tWWcWsQKBgQD7/X1WKBIqJRZcDYTf\n8pHFDzZxhDOpYX31vddk7A3xv9XvqQVCu6hkbFvMu5b80AOeYlo2SCvaA97sS7Bp\nbafoT6ZCwBztEBjk9v+X0LOSg847c/ik3+M9Nsnpv9N0qdjGtPgm8Kb15PaiHYAH\nT6kLkvYCFS5G17B2sVoOoWg7fQKBgQDycoX2+FPMPFqUesZ3BlAcZM8sVFTg1VL6\nRGesJLrT/3ueOUiCWjjcJlPodBNg2Y8N3hQV0CdwGxR14nKoVw0vpv+r/iJp1F7s\nsGqjtMIw6fHdqPdX2GIvraIxU+j8p94R1ACii3aztqcluJ1S8CsNmUxgUoMJKtO/\ntvNB4Pjh3wKBgELz/kpXCUSDaCZ7PRPXup12RkvxCVz212Xk1AcvpSDXjLtJ2Gj7\nvWk5VUbXjO2NQ3jgvwFvOZ+Kqb90+OF6TkOubgmMS+M9BLBJZG3s+Nl0BebMEIOW\nLSWFmi5uVnvH6R4a1VhbVrE87b7zQaIvq0W0/YJeKFaQVoWi57+9aRltAoGBANV/\n5FjH9YM04s8+Dudht8pJO+ddnCEhuiCJfIIrFhr6MHH1H9UqfkffuKRLE4WGEGO1\n3RoYY6JlNm9ZKn7zqbj85ske0k8/pRfpgv8Gfrt0SHlaAfZppo016k5mBhX3/abV\nenmpNq6reiXNnT0cIc2n4YoxHxNDk5SQF0c8Re8hAoGATtdkvUp4f6A4v9ppdJZs\npz7M6/NbKGJH9F3GZseSKTBKgtndiBugrfePOrcdC+4O0i33lvWDOs70kREC4wCG\nXMt36aS9Z384Pl7Z7FhiVQrTF2ZuRP/6v1r3iJDHixmJYQzjBO2Zh1D7Sf39BxOv\n2h0dFcPMKaZcLsXTFH1qS0I=\n-----END PRIVATE KEY-----"
+                }
+            }
+        }
+    }
+}
