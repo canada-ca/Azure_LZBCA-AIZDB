@@ -11,7 +11,7 @@ The users of this initiative will be Government of Canada employees deploying cl
 
 The Azure Landing Zone Base Cloud Architecture **(LZBCA)** is an initiative that is led by Cloud Product Management & Services - Research & Development team. 
 
-The Azure LZBCA is a fully functional Virtual Data Centre (VDC) with what is believed to have all the necessary components required to meet the Cloud PBMM Security profile through Infrastructure as Code (IaC). It aligns with Cloud Usage Profile 3 with a future design for Cloud Usage Profiles 5 & 6.  We will be starting our Security Assessment (SA) on the environment in June 2020. 
+The Azure LZBCA is a fully functional Virtual Data Centre (VDC) with the necessary configuration to meet the 30-Day Guardrails (technical only) and many of the 90-Day guardrails through Infrastructure as Code (IaC). It aligns with Cloud Usage Profile 3, with a future design for Cloud Usage Profiles 5 & 6.  We will be starting our Security Assessment (SA) on the environment in June 2020. 
   
 * For Network details See [Network Architecture](Network/README.md)
 * For Routing details See [Routing and Flow Control Overview](Network/Routing_Overview.md)
@@ -141,7 +141,7 @@ Les utilisateurs de cette initiative seront des employés du gouvernement du Cana
 
 L'AIZDB est une initiative dirigée par la direction des services et de la gestion des produits infonuagiques- Équipe de recherche et développement.
 
-L’AIZDB est un centre de données virtuel (CDV) entièrement fonctionnel doté de toutes les composantes nécessaires pour rencontrer le profil de sécurité infonuagique PBMM via une infrastructure déployable par Code (IaC). Il s'aligne sur le profil d'utilisation infonuagique 3 avec une conception future qui tiens compte des profils d'utilisation infonuagique 5 et 6. Nous commencerons notre évaluation de la sécurité (SA) sur l'environnement en juin 2020.
+L’AIZDB est un centre de données virtuel (CDV) entièrement fonctionnel doté de toutes les composantes nécessaires pour rencontrer les garde-fous de 30 jours (aspects techniques) ainsi que plusieurs des garde-fous de 90 jours via une infrastructure déployable par Code (IaC). Il s'aligne sur le profil d'utilisation infonuagique 3 avec une conception future qui tiens compte des profils d'utilisation infonuagique 5 et 6. Nous commencerons notre évaluation de la sécurité (SA) sur l'environnement en juin 2020.
 
 Il a été conçu pour permettre aux partenaires de déployer rapidement une zone d'atterrissage Azure qui s'aligne sur les normes de dénomination et les blocs d’addresses IP d'un partenaire.
 
