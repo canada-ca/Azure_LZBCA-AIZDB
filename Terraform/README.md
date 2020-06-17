@@ -14,7 +14,7 @@ These steps are executed before executing the Terraform deployment
 * Modify config.tf to match your configuration and automation account
 * Verify storage accounts
 * Copy the Fortigate license files into the \Terraform\FG
-* Paste F5 license files into \Terraform\F5\f5_api_data.tf (line 5 and 41)
+* Paste F5 license keys into \Terraform\F5\f5_api_data.tf (line 5 and 41)
 * Update config.tf with your environment's values (in \terraform, \terraform\F5, and \terraform\Deployment_Host)
 * Configure a deployment host (one is provided with the LZ deployment package)
 
