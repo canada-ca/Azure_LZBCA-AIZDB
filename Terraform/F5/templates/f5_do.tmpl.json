@@ -132,7 +132,7 @@
 	        "members": ["${host1}.${domainname}", "${host2}.${domainname}"],
 	        "owner": "/Common/failoverGroup/members/0",
 	        "autoSync": true,
-	        "saveOnAutoSync": false,
+	        "saveOnAutoSync": true,
 	        "networkFailover": true,
 	        "fullLoadOnSync": false,
 	        "asmSync": false
