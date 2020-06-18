@@ -105,6 +105,7 @@ source_address_prefixes = ["ENTER YOUR SOURCE IP"]
 destination_address_prefix = "*"
 description = "Allow_RDP"
 }
+tags = var.tags
 }
 
 resource "azurerm_subnet_network_security_group_association" "LzDcCNR-Deployment_Host-nsg-LzDcCNR-Deployment_Host-snet" {
@@ -112,3 +113,5 @@ subnet_id = azurerm_subnet.LzDcCNR-Deployment_Host-snet.id
 network_security_group_id = azurerm_network_security_group.LzDcCNR-Deployment_Host-nsg.id
 provider = azurerm.LzDc-PBMMCore
 }
+
+output "LzPcSWE-DHF01-pip1" { value = azurerm_public_ip.LzDcSWE-DH01-pip1.ip_address}
