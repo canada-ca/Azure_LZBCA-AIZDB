@@ -86,8 +86,8 @@ config global
 end   
 config global
     config system dns
-       set primary 208.91.112.52
-       set secondary 208.91.112.53
+       set primary 168.63.129.16
+       set secondary 8.8.8.8
     end
     config system vdom-link
         edit "vdomlink"
