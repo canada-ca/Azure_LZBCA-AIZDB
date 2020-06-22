@@ -27,6 +27,7 @@ ______________________
 ## How to Contribute
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
+Contact [ssc.azurelzbca-azureaizdb.spc@canada.ca](mailto:ssc.azurelzbca-azureaizdb.spc@canada.ca)
 
 ## License
 
@@ -153,6 +154,7 @@ ______________________
 ## Comment contribuer
 
 Voir [CONTRIBUTING.md](CONTRIBUTING.md)
+Contactez [ssc.azurelzbca-azureaizdb.spc@canada.ca](mailto:ssc.azurelzbca-azureaizdb.spc@canada.ca)
 
 ## Licence
 
