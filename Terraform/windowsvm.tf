@@ -193,8 +193,7 @@ deployment="azure-lz-iac-2020-06-12"
 
 }
 
-
-}
+var.host
 
 resource "azurerm_virtual_machine" "LzPcSWJ-RDSH02" {
 
