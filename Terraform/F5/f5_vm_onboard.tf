@@ -21,7 +21,7 @@ data "template_file" "LzPcADC-F5VM-vm_onboard" {
         TS_Document         = "${data.template_file.LzPcADC-F5VM01-ts_json.rendered}"
 
         api_user       = "azops"
-        api_pass       = "Canada12345"
+        api_pass       = "Canada1!"
         mgmt_ip1       = "172.16.5.11"
         mgmt_ip2       = "172.16.5.12"
         mgmt_gw        = "172.16.5.1"
