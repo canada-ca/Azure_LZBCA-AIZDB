@@ -2,7 +2,7 @@
 data "template_file" "LzPcADC-F5VM01-do_json" {
 template = "${file("${path.module}/templates/f5_do.tmpl.json")}"
 vars = {
-regkey         = "KBRMS-OXORL-OBWCS-EEUWF-IEMAAZR"
+regkey         = "ENTER VALID LICENSE KEY"
 host1          = "LzPcADC-F5VM01"
 host2          = "LzPcADC-F5VM02"
 domainname     = "azure.local"
@@ -38,7 +38,7 @@ admin_pass     = "Canada12345"
 data "template_file" "LzPcADC-F5VM02-do_json" {
 template = "${file("${path.module}/templates/f5_do.tmpl.json")}"
 vars = {
-regkey         = "AFCGK-RHFZM-UJQIR-DJSKE-QFRAEFB"
+regkey         = "ENTER VALID LICENSE KEY"
 host1          = "LzPcADC-F5VM01"
 host2          = "LzPcADC-F5VM02"
 domainname     = "azure.local"
