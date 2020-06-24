@@ -86,7 +86,7 @@ tags = {
 
 resource "azurerm_virtual_machine_extension" "LzPcADC-F5VM02-run_startup_cmd" {
     name = "LzPcADC-F5VM02-run_startup_cmd"
-    depends_on = ["azurerm_virtual_machine.LzPcADC-F5VM01", "azurerm_virtual_machine.LzPcADC-F5VM02"]
+    depends_on = ["azurerm_virtual_machine.LzPcADC-F5VM01", "azurerm_virtual_machine.LzPcADC-F5VM02", "azurerm_virtual_machine_extension.ScPcADC-F5VM01-run_startup_cmd"]
     location = "canadaCentral"
     resource_group_name = data.azurerm_resource_group.LzPc-Security_Core_External-rg.name
     provider = azurerm.LzPc-PBMMCore
