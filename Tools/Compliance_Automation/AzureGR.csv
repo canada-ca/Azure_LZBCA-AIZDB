@@ -1,0 +1,402 @@
+Requirement ID,recommendation #,CONTROL #,GR #,MS PBMM Blueprint,CONTROL NAME,Title,Discription,rationale statement,remediation procedure,audit procedure (Manual),audit procedure (Automatic),Expected Result (output of command),Check condition,Compliance Status,,,,
+AZ-L1-009,2.2,"SI-2(1)
+
+SI-3(1)
+
+SI-4
+
+CM-2(2)
+
+CM-8(2)
+
+SI-4","SI-2 #10
+No specific ref to SI-2(1)
+
+SI-3 #9
+No specific ref to SI-3(1)
+
+SI-4 # 9,10,11
+
+CM-2 #12
+No specific ref to CM-2(2)
+
+CM-8 #12
+No specific ref to CM-8(2)
+No specific ref to SI-3(1)
+
+SI-4 # 9,10,11","SI-2
+No specific ref to SI-2(1)
+
+SI-3(1)
+
+SI-4","  FLAW REMEDIATION | CENTRAL MANAGEMEN
+
+MALICIOUS CODE PROTECTION | CENTRAL MANAGEMENT
+
+INFORMATION SYSTEM MONITORING 
+
+ BASELINE CONFIGURATION | AUTOMATION SUPPORT FOR ACCURACY / CURRENCY
+
+ INFORMATION SYSTEM COMPONENT INVENTORY | AUTOMATED MAINTENANCE",Ensure that 'Automatic provisioning of monitoring agent' is set to 'On',Enable Automatic provisioning of monitoring agent to collect security data.," Azure Security Center provisions the Microsoft Monitoring Agent on all existing supported Azure virtual machines and any new ones that are created. The Microsoft Monitoring agent scans for various security-related configurations and events such as system updates, OS vulnerabilities, and endpoint protection and provides alerts.","1. Go to `Security Center`
+2. Click on `Security Policy`
+3. Click on each subscription
+4. Click on `Data Collection`
+5. Set `Automatic provisioning of monitoring agent` to `On`
+","1: From Security Center's menu in the portal, select Pricing & settings.
+2: Select the relevant subscription.
+3: Select Data Collection.
+4: Under Auto Provisioning, select On to enable automatic provisioning.
+5: Select Save. The agent will be deployed on all VMs within 15 minutes.        
+","$autoprovision=(Get-AzSecurityAutoProvisioningSetting).AutoProvision
+if($autoprovision -eq 'On'){Write-Output 'Auto provisioning is ON'; return $autoprovision}else{Write-Output 'Auto provisioning is not ON'; return $autoprovision}
+",On,should contain,,,,,
+AZ-L1-012,2.5,"SI-3(1)
+
+SI-4",11,," MALICIOUS CODE PROTECTION | CENTRAL MANAGEMENT
+
+INFORMATION SYSTEM MONITORING ",Ensure that 'Endpoint protection' is set to 'On'                                                                                                                                                                                                          (New Wording)     Monitor missing Endpoint Protection in Azure Security Center,Enable Endpoint protection recommendations for virtual machines.,"When this setting is enabled, it recommends endpoint protection be provisioned for all Windows virtual machines to help identify and remove viruses, spyware, and other malicious software.",1: Select Assignments from the Policy blade.                     2: Select the ASC Default Initiative                                 3: Enable Policy Enforcement,1: Select Assignments from the Policy blade.                                   2: Select the ASC Default Initiative                                 3: Verify Policy Enforcement setting   Note: Monitor Missing Endpoint Protection in Azure security Center Policy is part of the ASC initiative.                                                                ,"$tocheck='/providers/Microsoft.Authorization/policyDefinitions/af6cd1bd-1635-48cb-bde7-5b15693900b9';
+$polObj=Get-AzPolicyDefinition -Id $tocheck
+$polasgn=(Get-AzPolicyAssignment  -Name 'SecurityCenterBuiltIn').Properties; 
+$polasgn | %{if ($_.enforcementMode -eq ""DoNotEnforce""){Write-Output ""$($_.displayName) Initiative is not Enforced""}else{Write-Output ""$($_.displayName) Initiative is Enforced""};
+if(($tocheck -in ($_.policyDefinitionId | %{Get-AzPolicyDefinition -Id $_ | %{$_.Properties.policydefinitions.policyDefinitionId}})) -eq $false)
+  { Write-Output ""$($polObj.Properties.displayName) is non-compliant"" }
+  else{ Write-Output ""$($polObj.Properties.displayName) is compliant"" } };
+$polasgn | %{if ($_.enforcementMode -eq ""DoNotEnforce"" -or ($tocheck -in ($_.policyDefinitionId | %{Get-AzPolicyDefinition -Id $_ | %{$_.Properties.policydefinitions.policyDefinitionId}})) -eq $false)
+  { return ""non-compliant"" } }",compliant,should contain,,,,,
+AZ-L1-013,2.6,CM-6(1) ,6,,CONFIGURATION SETTINGS | AUTOMATED CENTRAL MANAGEMENT / APPLICATION / VERIFICATION,Ensure that 'Disk encryption' is set to 'On'  (New Wording)             Disk encryption should be applied on virtual machines,Enable Disk encryption recommendations for virtual machines.,"When this setting is enabled, it recommends enabling disk encryption in all virtual machines to enhance data protection at rest.",1: Select Assignments from the Policy blade.                                   2: Select the ASC Default Initiative                                 3: Enable Policy Enforcement setting   Note: Disk encryption should be applied on virtual machines,1: Select Assignments from the Policy blade.                                   2: Select the ASC Default Initiative                                 3: Verify Policy Enforcement setting   Note: Disk encryption should be applied on virtual machines,"$tocheck='/providers/Microsoft.Authorization/policyDefinitions/0961003e-5a0a-4549-abde-af6a37f2724d';
+$polObj=Get-AzPolicyDefinition -Id $tocheck
+$polasgn=(Get-AzPolicyAssignment  -Name 'SecurityCenterBuiltIn').Properties; 
+$polasgn | %{if ($_.enforcementMode -eq ""DoNotEnforce""){Write-Output ""$($_.displayName) Initiative is not Enforced""}else{Write-Output ""$($_.displayName) Initiative is Enforced""};
+if(($tocheck -in ($_.policyDefinitionId | %{Get-AzPolicyDefinition -Id $_ | %{$_.Properties.policydefinitions.policyDefinitionId}})) -eq $false)
+  { Write-Output ""$($polObj.Properties.displayName) is non-compliant"" }
+  else{ Write-Output ""$($polObj.Properties.displayName) is compliant"" } };
+$polasgn | %{if ($_.enforcementMode -eq ""DoNotEnforce"" -or ($tocheck -in ($_.policyDefinitionId | %{Get-AzPolicyDefinition -Id $_ | %{$_.Properties.policydefinitions.policyDefinitionId}})) -eq $false)
+  { return ""non-compliant"" } }",compliant,should contain,,,,,
+AZ-L1-028,3.2,SC-28(1),SC-28(1) #6,SC-28(1),PROTECTION OF INFORMASTION \ CRYPTOGRAPHIC PROTECTION,Ensure that 'Storage service encryption' is set to Enabled for Blob Service,Enable data encryption at rest for blobs.,"Storage service encryption protects your data at rest. Azure Storage encrypts your data as it's written in its datacenters, and automatically decrypts it for you as you access it.","1. Go to `Storage Accounts`
+2. For each storage account, go to `Encryption` under `BLOB SERVICE`
+3. Select 'Microsoft-managed keys or Customer-managed keys","1. Go to `Storage Accounts`
+2. For each storage account, go to `Encryption` under `BLOB SERVICE`
+3. Notice 'Either Microsoft-managed keys or Customer-managed keys is selected.","$stAccount = Get-AzStorageAccount; 
+$stAccount | %{if($_.Encryption.KeySource -ne 'Microsoft.Storage'){Write-Output ""$($_.StorageAccountName) is not using Microsoft provided key""}
+else{Write-Output ""$($_.StorageAccountName) is using Microsoft provided key""}};
+$stAccount | %{if($_.Encryption.KeySource -ne 'Microsoft.Storage'){return ""non-compliant""}}",non-compliant,should not contain,,,,,
+AZ-L1-014,2.7,CM-6(1) ,9,,CONFIGURATION SETTINGS | AUTOMATED CENTRAL MANAGEMENT / APPLICATION / VERIFICATION,Ensure that 'Network security groups' is set to 'On'                                          (New-Wording)                 Internet-facing virtual machines should be protected with network security groups.,Enable Network security groups recommendations for virtual machines.,"When this setting is enabled, it recommends that network security groups be configured to control inbound and outbound traffic to VMs that have public endpoints. Network security groups that are configured for a subnet is inherited by all virtual machine network interfaces unless otherwise specified. In addition to checking that a network security group has been configured, this policy assesses inbound security rules to identify rules that allow incoming traffic.","Assign the NSG to the VM's subnet:
+????i. In the Networking page, select the 'Virtual network/subnet'.
+????ii. Open the ""Subnets"" menu.
+????iii. Select the subnet where your VM is deployed.
+????iv. Select the Network Security Group to assign to the subnet and click ""Save"".
+Assign the NSG to the NIC:
+????i. In the Networking page, select the network interface that's associated with the selected VM.
+????ii. In the Network interfaces page, select the 'Network security group' menu item.
+????iii. Click 'Edit' at the top of the page.
+????iv. Follow the on-screen instructions and select the Network Security Group to assign to this NIC.","Assign the NSG to the VM's subnet:
+????i. In the Networking page, select the 'Virtual network/subnet'.
+????ii. Open the ""Subnets"" menu.
+????iii. Select the subnet where your VM is deployed.
+????iv. Select the Network","$tocheck='/providers/Microsoft.Authorization/policyDefinitions/f6de0be7-9a8a-4b8a-b349-43cf02d22f7c';
+$polObj=Get-AzPolicyDefinition -Id $tocheck
+$polasgn=(Get-AzPolicyAssignment  -Name 'SecurityCenterBuiltIn').Properties; 
+$polasgn | %{if ($_.enforcementMode -eq ""DoNotEnforce""){Write-Output ""$($_.displayName) Initiative is not Enforced""}else{Write-Output ""$($_.displayName) Initiative is Enforced""};
+if(($tocheck -in ($_.policyDefinitionId | %{Get-AzPolicyDefinition -Id $_ | %{$_.Properties.policydefinitions.policyDefinitionId}})) -eq $false)
+  { Write-Output ""$($polObj.Properties.displayName) is non-compliant"" }
+  else{ Write-Output ""$($polObj.Properties.displayName) is compliant"" } };
+$polasgn | %{if ($_.enforcementMode -eq ""DoNotEnforce"" -or ($tocheck -in ($_.policyDefinitionId | %{Get-AzPolicyDefinition -Id $_ | %{$_.Properties.policydefinitions.policyDefinitionId}})) -eq $false)
+  { return ""non-compliant"" } }",non-compliant,should not contain,,,,,
+AZ-L1-021 .1,2.14,CM-6(1) ,"10, 11",, CONFIGURATION SETTINGS | AUTOMATED CENTRAL MANAGEMENT / APPLICATION / VERIFICATION,Ensure that 'SQL auditing & Threat detection' is set to 'On'                                  Ensure that 'Threat detection' is set to 'On' (Checks Advanced Data Security Settings),Enable SQL auditing & Threat detection recommendations.,"When this setting is enabled, it recommends that auditing of access to Azure Database be enabled for compliance and also advanced threat detection, for investigation purposes.","1. Go to `Security Center`
+2. Click on `Security Policy`
+3. Click on the security policy subscription
+4. Click on `Security policy`
+5. Set `SQL auditing & Threat detection` to `On`","1. Go to `Security Center`
+2. Click on `Security Policy`
+3. Click on the security policy subscription
+4. Click on `Security policy`
+5. Ensure that `SQL auditing & Threat detection` is set to `On`","$sqlsrv = Get-AzResourceGroup | % {Get-AzSqlServer -ResourceGroupName $_.ResourceGroupName};
+$sqlsrv | % {if ((Get-AzSqlServerAdvancedDataSecurityPolicy -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName).IsEnabled -ne 'True') {Write-Output ""$($_.ServerName) does NOT have Threat detection set to ON""}else{Write-Output ""$($_.ServerName) has Threat detection set to ON""}};
+$sqlsrv | % {if ((Get-AzSqlServerAdvancedDataSecurityPolicy -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName).IsEnabled -ne 'True') {return ""non-compliant""}};",non-compliant,should not contain,,,,,
+AZ-L1-021 .2,2.14,CM-6(1) ,10,, CONFIGURATION SETTINGS | AUTOMATED CENTRAL MANAGEMENT / APPLICATION / VERIFICATION,Ensure that 'SQL auditing & Threat detection' is set to 'On'                                  Ensure that 'SQL auditing' is set to 'On'  (Checks Auditing),Enable SQL auditing & Threat detection recommendations.,"When this setting is enabled, it recommends that auditing of access to Azure Database be enabled for compliance and also advanced threat detection, for investigation purposes.","To enable SQL server auditing:
+1. Select the SQL server.
+2. Under Auditing, select On.
+3. Select Storage details and configure a storage account for the audit log.
+4. Click Save.","To enable SQL server auditing:
+1. Select the SQL server.
+2. Under Auditing, select On.
+3. Select Storage details and configure a storage account for the audit log.
+4. Verify Auditing status.","$sqlsrv = Get-AzResourceGroup | % {Get-AzSqlServer -ResourceGroupName $_.ResourceGroupName};
+$sqlsrv | % {if ((Get-AzSqlServerAudit -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName).BlobStorageTargetState -eq 'Disabled') {Write-Output ""$($_.ServerName) does NOT have Audting ON""}else{Write-Output ""$($_.ServerName) has Audting ON""}};
+$sqlsrv | % {if ((Get-AzSqlServerAudit -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName).BlobStorageTargetState -eq 'Disabled') {return 'non-compliant'}};",non-compliant,should not contain,,,,,
+AZ-L1-022,2.15,,6,, CONFIGURATION SETTINGS | AUTOMATED CENTRAL MANAGEMENT / APPLICATION / VERIFICATION,Ensure that 'SQL Encryption' is set to 'On',Enable SQL Encryption recommendations.,"When this setting is enabled, it recommends that encryption at rest be enabled for your Azure SQL Database, associated backups, and transaction log files. Even if your data is breached, it will not be readable.","1. Select Transparent data encryption blade from the database
+2. Set Data encryption to ON.
+","1. Select Transparent data encryption blade from the database
+2. Verify Data encryption is set to ON.","$sqlsrv = Get-AzResourceGroup | % {Get-AzSqlServer -ResourceGroupName $_.ResourceGroupName};
+$sqlsrv | % {Get-AzSqlDatabase -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName} | %{if($_.DatabaseName -ne 'master'){if((Get-AzSqlDatabaseTransparentDataEncryption -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName -DatabaseName $_.DatabaseName).State -eq 'Disabled'){Write-Output ""$($_.DatabaseName) does not have Data Encryption set to ON""}else{Write-Output ""$($_.DatabaseName) has Data Encryption set to ON""}}};
+$sqlsrv | % {Get-AzSqlDatabase -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName} | %{if($_.DatabaseName -ne 'master'){if((Get-AzSqlDatabaseTransparentDataEncryption -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName -DatabaseName $_.DatabaseName).State -eq 'Disabled'){return ""non-compliant""}}}",,,,,,,
+AZ-L1-027,3.1,SC-8(1),SC-8(1) #7,SC-8(1), TRANSMISSION CONFIDENTIALITY AND INTEGRITY | CRYPTOGRAPHIC OR ALTERNATE PHYSICAL PROTECTION,Ensure that 'Secure transfer required' is set to 'Enabled',Enable data encryption is transit.,The secure transfer option enhances the security of your storage account by only allowing requests to the storage account by a secure connection. ,"1. Go to `Storage Accounts`
+2. For each storage account, go to `Configuration`
+3. Set `Secure transfer required` to `Enabled`
+","1. Go to `Storage Accounts`
+2. For each storage account, go to `Configuration`
+3. Verify `Secure transfer required` settings is `Enabled`
+","$STA = Get-AzStorageAccount; 
+$STA | %{ if($_.EnableHttpsTrafficOnly -ne 'True') {Write-Output ""Storage Account: $($_.StorageAccountName) is non-compliant"" } 
+else {Write-Output ""Storage Account: $($_.StorageAccountName) is compliant""} }; 
+$STA | %{if($_.EnableHttpsTrafficOnly -ne 'True') {return 'non-compliant'}} ",non-compliant,should not contain,,,,,
+AZ-L1-028,3.2,SC-28(1),6,, PROTECTION OF INFORMATION AT REST | CRYPTOGRAPHIC PROTECTION,Ensure that 'Storage service encryption' is set to Enabled for Blob Service,Enable data encryption at rest for blobs.,"Storage service encryption protects your data at rest. Azure Storage encrypts your data as it's written in its datacenters, and automatically decrypts it for you as you access it.","1. Go to `Storage Accounts`
+2. For each storage account, go to `Encryption` under `Settings`
+3. Set `Storage service encryption` to `Enabled`
+
+Use the below command to enable the `Encryption` for `Storage Accounts` `BLOB SERVICE`
+
+```
+az storage account update --name  --resource-group  --set encryption.services.blob.enabled=true
+```","1. Go to `Storage Accounts`
+2. For each storage account, go to `Encryption` under `Settings`
+3. Ensure that `Storage service encryption` is set to `Enabled`","$stAccount = Get-AzStorageAccount; 
+$stAccount | %{if($_.Encryption.KeySource -ne 'Microsoft.Storage'){Write-Output ""Storage Account: $($_.StorageAccountName) is encrypted with Customer managed key""}
+else{Write-Output ""Storage Account: $($_.StorageAccountName) is encrypted with Microsoft provided key""}};
+$stAccount | %{if($_.Encryption.KeySource -ne 'Microsoft.Storage'){return ""non-compliant""}}",non-compliant,should not contain,,,,,
+AZ-L1-032,3.6,SC-28(1),6,, PROTECTION OF INFORMATION AT REST | CRYPTOGRAPHIC PROTECTION,Ensure that 'Storage service encryption' is set to Enabled for File Service,Enable data encryption at rest for file service.,"Storage service encryption protects your data at rest. Azure Storage encrypts your data as it's written in its datacenters, and automatically decrypts it for you as you access it.","1. Go to `Storage Accounts`
+2. For each storage account, go to `Encryption` under `Settings`
+3. Ensure that `Storage service encryption` is set to `Enabled`","1. Go to `Storage Accounts`
+2. For each storage account, go to `Encryption` under `Settings`
+3. Ensure that `Storage service encryption` is set to `Enabled`","$stAccount = Get-AzStorageAccount; 
+$stAccount | %{if($_.Encryption.KeySource -ne 'Microsoft.Storage'){Write-Output ""Storage Account: $($_.StorageAccountName) is encrypted with Customer managed key""}
+else{Write-Output ""Storage Account: $($_.StorageAccountName) is encrypted with Microsoft provided key""}};
+$stAccount | %{if($_.Encryption.KeySource -ne 'Microsoft.Storage'){return ""non-compliant""}}",non-compliant,should not contain,,,,,
+AZ-L1-033,3.7,"AC-3
+
+SC-7(5)",8,"SC-7
+No specific ref to SC-7(5)"," ACCESS ENFORCEMENT
+
+BOUNDARY PROTECTION | DENY BY DEFAULT / ALLOW BY EXCEPTIO",Ensure that 'Public access level' is set to Private for blob containers,Disable anonymous access to blob containers.,,"1. Go to `Storage Accounts`
+2. For each storage account, go to `Containers` under `BLOB SERVICE`
+3. For each container, click `Access policy`
+4. Set Access level to `Private (no anonymous access)`
+","1. Go to `Storage Accounts`
+2. For each storage account, go to `Containers` under `BLOB SERVICE`
+3. For each container, click `Access policy`
+4. Ensure that `Public access level` is set to `Private (no anonymous access)`
+","$accounts = Get-AzStorageAccount
+ foreach ($account in $accounts) {
+ $containers = Get-AzStorageContainer -Context $account.Context | Select *
+ foreach ($container in $containers) {
+ $container | %{if($container.PublicAccess -ne 'off'){Write-Output ""container: $($container.Name) is non-compliant""}
+ else{Write-Output ""container: $($container.Name) is compliant""}};
+     } 
+ }  ",non-compliant,should not contain,,,,,
+AZ-L1-045,4.2.4,SI-4(12),11,, INFORMATION SYSTEM MONITORING | AUTOMATED ALERTS,Ensure that 'Send alerts to' is set ,Provide the email address to which alerts will be sent upon detection of anomalous activities on SQL databases.,"Providing the email address to receive alerts ensures that any detection of anomalous activities is reported as soon as possible, making it more likely to mitigate any potential risk sooner.","1. Go to `SQL databases`
+2. For each DB instance
+3. Click on `Auditing & Threat Detection`
+4. Set `Send alerts to` as appropriate
+
+Use the below command to set `SQL Databases Send Alerts to` is set to valid email addresses, by providing semicolon separated list of email addresses.
+
+```
+az sql db threat-policy update --resource-group  --server  --name  --email-addresses ","1. Go to `SQL databases`
+2. For each DB instance
+3. Click on `Auditing & Threat Detection`
+4. Ensure that `Send alerts to` is set as appropriate
+"," $sqlsrv = Get-AzResourceGroup | % {Get-AzSqlServer -ResourceGroupName $_.ResourceGroupName};
+$sqlsrv | % {Get-AzSqlDatabase -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName} | %{if((Get-AzSqlDatabaseVulnerabilityAssessmentSetting  -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName -DatabaseName $_.DatabaseName).EmailSubscriptionAdmins -eq 'False'){Write-Output ""Send Alert is not ON for $($_.ServerName)""}else{Write-Output ""Send Alert is ON for: $($_.ServerName)""}};
+$sqlsrv | % {Get-AzSqlDatabase -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName} | %{if((Get-AzSqlDatabaseVulnerabilityAssessmentSetting  -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName -DatabaseName $_.DatabaseName).EmailSubscriptionAdmins -eq 'False'){return ""non-compliant""}};",non-compliant,should not contain,,,,,
+AZ-L1-047,4.2.6,SI-4(12),6,, PROTECTION OF INFORMATION AT REST | CRYPTOGRAPHIC PROTECTION,Ensure that 'Data encryption' is set to 'On' ,Encrypt database.,"Azure SQL Database transparent data encryption helps protect against the threat of malicious activity by performing real-time encryption and decryption of the database, associated backups, and transaction log files at rest without requiring changes to the application.","
+1. Go to `SQL databases`
+2. For each DB instance
+3. Click on `Transparent data encryption`
+4. Set `Data encryption` to `On`
+
+**Azure Command Line Interface 2.0**
+
+Use the below command to enable `Transparent data encryption` for SQL DB instance.
+
+```
+az sql db tde set --resource-group  --server  --database  --status Enabled
+```","1. Go to `SQL databases`
+2. For each DB instance
+3. Click on `Transparent data encryption`
+4. Ensure that `Data encryption` is set to `On`
+
+**Azure Command Line Interface 2.0**
+
+Ensure the output of the below command is `Enabled`
+
+```
+az sql db tde show --resource-group  --server  --database  --query status
+```","$sqlsrv = Get-AzResourceGroup | % {Get-AzSqlServer -ResourceGroupName $_.ResourceGroupName};
+$sqlsrv | % {Get-AzSqlDatabase -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName} | %{if($_.DatabaseName -ne 'master'){if((Get-AzSqlDatabaseTransparentDataEncryption -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName -DatabaseName $_.DatabaseName).State -eq 'Disabled'){Write-Output ""Database: $($_.DatabaseName) is non-compliant""}else{Write-Output ""Database: $($_.DatabaseName) is compliant""}}};
+$sqlsrv | % {Get-AzSqlDatabase -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName} | %{if($_.DatabaseName -ne 'master'){if((Get-AzSqlDatabaseTransparentDataEncryption -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName -DatabaseName $_.DatabaseName).State -eq 'Disabled'){return ""non-compliant""}}}",non-compliant,should not contain,,,,,
+AZ-L1-048,4.2.7,AU-11,11,,,Ensure that 'Auditing' Retention is 'greater than 90 days' ..Needs to be modified for sql ,Audit Logs can be used to check for anomalies and give insight into suspected breaches or misuse of information and access.,Audit Logs can be used to check for anomalies and give insight into suspected breaches or misuse of information and access.,"1. Go to `SQL databases`
+2. For each database
+3. Click on `Auditing & Threat Detection`
+4. Select `Storage Details`
+5. Set `Retention (days)` setting `greater than 90 days`
+6. Select `OK`
+7. Select `Save`
+
+**Azure Command Line Interface 2.0**
+
+Use the below command to set SQL Databases Auditing Retention to `greater than 90 days`
+
+```
+az sql db audit-policy update --resource-group  --server  --name  --retention-days ","1. Go to `SQL databases`
+2. For each database
+3. Click on `Auditing & Threat Detection`
+4. Select `Storage Details`
+5. Ensure `Retention (days)` setting `greater than 90 days`
+
+**Azure Command Line Interface 2.0**
+
+Ensure the output for the below command is `greater than 90`.
+
+```
+az sql db audit-policy show --resource-group  --server  --name  --query 'retentionDays'
+```","$sqlsrv = Get-AzResourceGroup | % {Get-AzSqlServer -ResourceGroupName $_.ResourceGroupName};
+$sqlsrv | % {if ((Get-AzSqlServerAudit -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName).RetentionInDays -lt 90) {Write-Output ""$($_.ServerName) does NOT have Audting Retention greater than 90 days""}else{Write-Output ""$($_.ServerName) has Audting Retention greater than 90 days""}};
+$sqlsrv | % {if ((Get-AzSqlServerAudit -ServerName $_.ServerName -ResourceGroupName $_.ResourceGroupName).RetentionInDays -lt 90) {return 'non-compliant'}};",non-compliant,should not contain,,,,,
+AZ-L1-049,4.2.8,AU-11,11,,,Ensure that 'Threat' Retention is 'greater than 90 days' Needs to be modified for sql ,SQL Database Threat Retention should be configured to be greater than 90 days.,Audit Logs can be used to check for anomalies and give insight into suspected breaches or misuse of information and access.,"1. Go to `SQL databases`
+2. For each database, click on `Auditing & Threat Detection`
+3. Ensure that `Auditing` is set to `ON`
+4. Click on `Storage details`
+5. Configure an appropriate `Storage account` and `Retention (Days)` to `90 or above`.
+
+**Azure Command Line Interface 2.0**
+
+Use the below command to set `SQL Databases Threat Detection` retention days to `more than 90 days`.
+
+```
+az sql db threat-policy update --resource-group  --server  --name  --retention-days 
+```","1. Go to `SQL databases`
+2. For each database, click on `Auditing & Threat Detection`
+3. Ensure that `Auditing` is set to `ON`
+4. Click on `Storage details`
+5. Ensure that the `Retention (Days)` is set to `90 or above`.
+
+**Azure Command Line Interface 2.0**
+
+Ensure the below command output is `greater than 90 days`.
+
+```
+az sql db threat-policy show --resource-group  --server  --name  --query retentionDays
+```",,,,,,,,
+AZ-L1-051,5.2,AU-11,AU-11,,,Ensure that Activity Log Retention is set 365 days or greater,,"A Log Profile controls how your Activity Log is exported and retained. Since the average time to detect a breach is 210 days, it is recommended to retain your activity log for 365 days or more in order to have time to respond to any incidents.",,"1. Go to `Activity log`
+2. Select `Export`
+3. Set `Retention (days)` is set to `365 or greater`
+4. Select `Save`
+","$azLogProfile = Get-AzLogProfile -WarningAction SilentlyContinue;
+$azLogProfile | %{if(! ($_.RetentionPolicy.Enabled -and $_.RetentionPolicy.Days -ge 365)){Write-Output ""Activity Log Retention $($_) is NOT set for 365 days or greater""}else{Write-Output ""Activity Log Retention $($_) is set for 365 days or greater""}};
+$azLogProfile | %{if(! ($_.RetentionPolicy.Enabled -and $_.RetentionPolicy.Days -ge 365)){return 'non-compliant'}}",non-compliant,should not contain,,,,,
+AZ-L1-066,6.5,SI-4(13),"SI-4 #9,10,11
+
+","SI-4 #9,10,11
+
+",INFORMATION SYSTEM MONITORING | ANALYZE TRAFFIC / EVENT PATTERNS,Ensure that Network Watcher is 'Enabled',Enable Network Watcher for your Azure Subscriptions.,"Network diagnostic and visualization tools available with Network Watcher help you understand, diagnose, and gain insights to your network in Azure.","1. Go to `Network Watcher`
+2. Right click on the subscription name and click on `Enable network watcher in all regions`
+
+**Azure Command Line Interface 2.0**
+
+Configure the `Network Watcher` for your subscription
+
+```
+az network watcher configure --locations  --enabled [true] --resource-group  --tags key[=value] key[=value]
+```","1. Go to `Network Watcher`
+2. Ensure that the `STATUS` is set to `Enabled`
+","$state = (Get-AzNetworkWatcher).ProvisioningState;
+if($state -eq 'Succeeded'){Write-Output 'Network watcher is enabled'}else{Write-Output 'Network watcher is NOT enabled'};
+if($state -ne 'Succeeded'){return 'non-compliant'}",enabled,should contain,"Compliant                                 If the output command shows -  ""provisioningState"": ""Succeeded"",  It means the status will be compliant. Otherwise the status will be non compliant.",,,,
+AZ-L1-068,7.2,SC-28(1),6,, PROTECTION OF INFORMATION AT REST | CRYPTOGRAPHIC PROTECTION,Ensure that 'OS disk' are encrypted,"Ensure that OS disks (boot volumes) are encrypted, where possible.",Encrypting your IaaS VM's OS disk (boot volume) ensures that its entire content is fully unrecoverable without a key and thus protects the volume from unwarranted reads.,"Follow Microsoft Azure documentation.
+
+**Azure Command Line Interface 2.0**
+
+Use the below command to enable encryption for OS Disk for the specific VM.
+
+```
+az vm encryption enable --name  --resource-group  --volume-type OS --aad-client-id  --aad-client-secret  --disk-encryption-keyvault https:///secrets//","1. Go to `Virtual machines`
+2. For each virtual machine, go to `Settings`
+3. Click on `Disks`
+4. Ensure that the `OS disk` has encryption set to `Enabled`
+
+**Azure Command Line Interface 2.0**
+
+Ensure the below command output is shown as `Encrypted`
+
+```
+az vm encryption show --name  --resource-group  --query osDisk","$allRG=Get-AzResourceGroup;
+$allRG | % { $rg = $_.ResourceGroupName; (Get-AzVM -ResourceGroupName $rg) | %{ if((Get-AzVmDiskEncryptionStatus -ResourceGroupName $rg -VMName $_.Name).OsVolumeEncrypted -eq 'NotEncrypted'){Write-Output ""$($_.Name) is Not Encrypted""}  else {Write-Output ""$($_.Name) is Encrypted""}}};
+$allRG | % { $rg = $_.ResourceGroupName; (Get-AzVM -ResourceGroupName $rg) | %{ if((Get-AzVmDiskEncryptionStatus -ResourceGroupName $rg -VMName $_.Name).OsVolumeEncrypted -eq 'NotEncrypted'){return 'non-compliant'}}}",non-compliant,should not contain,,,,,
+AZ-L1-069,7.3,SC-28(1),6,, PROTECTION OF INFORMATION AT REST | CRYPTOGRAPHIC PROTECTION,Ensure that 'Data disks' are encrypted,"Ensure that Data disks (non-boot volumes) are encrypted, where possible.",Encrypting your IaaS VM's Data disks (non-boot volume) ensures that its entire content is fully unrecoverable without a key and thus protects the volume from unwarranted reads.,"Use the below command to enable encryption for Data Disk for the specific VM.
+
+```
+az vm encryption enable --name  --resource-group  --volume-type DATA --aad-client-id  --aad-client-secret  --disk-encryption-keyvault https:///secrets//","1. Go to `Virtual machines`
+2. For each virtual machine, go to `Settings`
+3. Click on `Disks`
+4. Ensure that each disk under `Data disks` has encryption set to `Enabled`
+
+**Azure Command Line Interface 2.0**
+
+Ensure the below command output is shown as `Encrypted`
+
+```
+az vm encryption show --name  --resource-group  --query dataDisk
+```","$allRG=Get-AzResourceGroup;
+$allRG | % { $rg = $_.ResourceGroupName; (Get-AzVM -ResourceGroupName $rg) | %{ if((Get-AzVmDiskEncryptionStatus -ResourceGroupName $rg -VMName $_.Name).DataVolumesEncrypted -eq 'NotEncrypted'){Write-Output ""VM Name: $($_.Name) - Data Disk is Not Encrypted""}  else {Write-Output ""VM $($_.Name): Data Disk is Encrypted""}}};
+$allRG | % { $rg = $_.ResourceGroupName; (Get-AzVM -ResourceGroupName $rg) | %{ if((Get-AzVmDiskEncryptionStatus -ResourceGroupName $rg -VMName $_.Name).DataVolumesEncrypted -eq 'NotEncrypted'){return 'non-compliant'}}}",non-compliant,should not contain,,,,,
+AZ-L1-001,1.1,IA-2(1),"IA-2#1,2,3,4
+
+","IA-2(1)
+
+", IDENTIFICATION AND AUTHENTICATION | NETWORK ACCESS TO PRIVILEGED ACCOUNTS,Ensure that multi-factor authentication is enabled for all privileged users,"Enable multi-factor authentication for all user credentials who have write access to Azure resources. These include roles like
+- Service Co-Administrators
+- Subscription Owners
+- Contributors",Multi-factor authentication requires an individual to present a minimum of two separate forms of authentication before access is granted. Multi-factor authentication provides additional assurance that the individual attempting to gain access is who they claim to be. ,Follow Microsoft Azure documentation and setup multi-factor authentication in your environment.,"**Azure Console**
+
+1. Go to `Azure Active Directory`
+2. Go to `Users and group`
+3. Go to `All Users`
+4. Click on `Multi-Factor Authentication` button on the top bar
+5. Ensure that `MULTI-FACTOR AUTH STATUS` is `Enabled` for all users who are `Service Co-Administrators` OR `Owners` OR `Contributors`.","$users=(Get-AzRoleAssignment -IncludeClassicAdministrators | Where-Object -Property ObjectType -EQ 'User' | Where-Object -Property RoleDefinitionName -in ('Owner','CoAdministrator','Contributor') | Select-Object -Unique -Property SignInName);
+$users | %{if((Get-Msoluser -UserPrincipalName $_.SignInName).StrongAuthenticationRequirements.State -ne $null) {Write-Output ""$($_.SignInName) does not have MFA enabled""} else{Write-Output ""$($_.SignInName) has MFA enabled""}};
+$users | %{if((Get-Msoluser -UserPrincipalName $_.SignInName).StrongAuthenticationRequirements.State -ne $null) {return ""non-compliant""}} ",non-compliant,should not contain,,,,,
+AZ-L1-003,1.5,IA-2(1),IA-2(1),,INFORMATION SYSTEM MONITORING | ANALYZE TRAFFIC / EVENT PATTERNS,"Ensure that ""Number of methods required to reset"" is set to ""2""",,,,"**Azure Console**
+
+1. Go to `Azure Active Directory`
+2. Go to `Users and group`
+3. Go to `Password reset`
+4. Go to `Authentication methods`
+5. Set the `Number of methods required to reset` to `2`",,,,Manual Process,,,,
+AZ-L1-067,6.5,SI-4(13),"SI-2
+
+","SI-42
+
+",INFORMATION SYSTEM MONITORING | ANALYZE TRAFFIC / EVENT PATTERNS,Verify Guest users,Guest users not required,Guest users not required,"**Azure Console**
+
+",Manual Process,"az ad user list --filter ""userType eq 'Guest'""","""userType"": ""Guest""",should not contain,"Compliant                                 .If no Guest users, the status is compliant",,,,
+AZ-L1-063,6.1,AC- 4  AC-17,"AC-4 #8,9",AC-4 AC-17,"INFORMATION FLOW ENFORCEMENT 
+
+REMOTE ACCESS",Ensure that RDP access is restricted from the internet,Disable RDP access on Network Security Groups from Internet,"The potential security problem with using RDP over the Internet is that attackers can use various brute force techniques to gain access to Azure Virtual Machines. Once the attackers gain access, they can use your virtual machine as a launch point for compromising other machines on your Azure Virtual Network or even attack networked devices outside of Azure.","Disable direct RDP access to your Azure Virtual Machines from the Internet. After direct RDP access from the Internet is disabled, you have other options you can use to access these virtual machines for remote management:
+
+ - [Point-to-site VPN](https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-point-to-site-resource-manager-portal)
+
+ - [Site-to-site VPN](https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-site-to-site-resource-manager-portal)
+
+ - [ExpressRoute](https://docs.microsoft.com/en-us/azure/expressroute/)","1. For each VM, open the `Networking` blade
+2. Verify that the `INBOUND PORT RULES` **does not** have a rule for RDP such as 
+ - port = `3389`, 
+ - protocol = `TCP`, 
+ - Source = `Any` OR `Internet`","$NSG=Get-AzNetworkSecurityGroup;  
+$NSG | %{ $nsgName = $_.Name; Get-AzNetworkSecurityRuleConfig -NetworkSecurityGroup $_ | %{if($_.DestinationPortRange -in (""3389"", ""*"") -and $_.SourceAddressPrefix -in (""*"",""0.0.0.0"",""/0"",""internet"",""any"") -and $_.Access -eq 'Allow'){ Write-Output ""$nsgName does not have restricted RDP access"" }else{ Write-Output ""$nsgName has restricted RDP access"" } } };
+$NSG | %{ Get-AzNetworkSecurityRuleConfig -NetworkSecurityGroup $_ | %{if($_.DestinationPortRange -in (""3389"", ""*"") -and $_.SourceAddressPrefix -in (""*"",""0.0.0.0"",""/0"",""internet"",""any"") -and $_.Access -eq 'Allow'){ return 'non-compliant' } } }",non-compliant,should not contain,,,,,
+AZ-L1-064,6.1,AC- 4  AC-17,"AC-4 #8,9",AC-4 AC-17,"INFORMATION FLOW ENFORCEMENT 
+
+REMOTE ACCESS",Ensure that SSH access is restricted from the internet,Disable SSH access on Network Security Groups from Internet,"The potential security problem with using SSH over the Internet is that attackers can use various brute force techniques to gain access to Azure Virtual Machines. Once the attackers gain access, they can use your virtual machine as a launch point for compromising other machines on your Azure Virtual Network or even attack networked devices outside of Azure.","Disable direct SSH access to your Azure Virtual Machines from the Internet. After direct SSH access from the Internet is disabled, you have other options you can use to access these virtual machines for remote management:
+
+ - [Point-to-site VPN](https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-point-to-site-resource-manager-portal)
+
+ - [Site-to-site VPN](https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-site-to-site-resource-manager-portal)
+
+ - [ExpressRoute](https://docs.microsoft.com/en-us/azure/expressroute/)","1. Open the `Networking` blade for the specific Virtual machine in Azure portal
+2. Verify that the `INBOUND PORT RULES` **does not** have a rule for SSH such as 
+ - port = `22`, 
+ - protocol = `TCP`, 
+ - Source = `Any` OR `Internet`","$NSG=Get-AzNetworkSecurityGroup;  
+$NSG | %{ $nsgName = $_.Name; Get-AzNetworkSecurityRuleConfig -NetworkSecurityGroup $_ | %{if($_.DestinationPortRange -in (""22"", ""*"") -and $_.SourceAddressPrefix -in (""*"",""0.0.0.0"",""/0"",""internet"",""any"") -and $_.Access -eq 'Allow'){ Write-Output ""$nsgName does not have restricted SSH access"" }else{ Write-Output ""$nsgName has restricted SSH access"" } } };
+$NSG | %{ Get-AzNetworkSecurityRuleConfig -NetworkSecurityGroup $_ | %{if($_.DestinationPortRange -in (""22"", ""*"") -and $_.SourceAddressPrefix -in (""*"",""0.0.0.0"",""/0"",""internet"",""any"") -and $_.Access -eq 'Allow'){ return 'non-compliant' } } }
+",non-compliant,should not contain,,,,,
