@@ -1,0 +1,29 @@
+﻿ScDcCNR-Dev-App-nsg has restricted RDP access
+ScDcCNR-Dev-App-nsg has restricted RDP access
+ScDcCNR-Dev-App-nsg does not have restricted RDP access
+ScDcCNR-Dev-Data-nsg has restricted RDP access
+ScDcCNR-Dev-FE-nsg has restricted RDP access
+ScDcCNR-Dev-Pres-nsg has restricted RDP access
+ScDcCNR-Dev_PAZ-App-nsg has restricted RDP access
+ScDcCNR-Dev_PAZ-FE-nsg has restricted RDP access
+ScPcCNR-Core-External-nsg has restricted RDP access
+ScPcCNR-Core-HA-nsg has restricted RDP access
+ScPcCNR-Core-InterVDOM-nsg has restricted RDP access
+ScPcCNR-Core-Int_Dev-nsg has restricted RDP access
+ScPcCNR-Core-Int_Prod-nsg has restricted RDP access
+ScPcCNR-Core-MGMT-nsg has restricted RDP access
+ScPcCNR-Core-MRZ-nsg has restricted RDP access
+ScPcCNR-Core-Transit-nsg has restricted RDP access
+ScPcCNR-MRZ-INF-nsg has restricted RDP access
+ScPcCNR-MRZ-LOG-nsg has restricted RDP access
+ScPcCNR-MRZ-MAZ-nsg has restricted RDP access
+ScPcCNR-MRZ-MGMT-nsg has restricted RDP access
+ScPcCNR-MRZ-SEC-nsg has restricted RDP access
+ScPcCNR-Prod-App-nsg has restricted RDP access
+ScPcCNR-Prod-Data-nsg has restricted RDP access
+ScPcCNR-Prod-FE-nsg has restricted RDP access
+ScPcCNR-Prod-Pres-nsg has restricted RDP access
+ScPcCNR-Prod_PAZ-App-nsg has restricted RDP access
+ScPcCNR-Prod_PAZ-FE-nsg has restricted RDP access
+non-compliant
+

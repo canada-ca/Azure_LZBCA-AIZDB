@@ -4,37 +4,43 @@
 
     $current_dir = Convert-Path .
 	$log = "Current working directory - ", $current_dir
-#	Write-Output $log
+	Write-Output $log
 	
 	$current_date = Get-Date -Format "yyyyMMdd"
 	$log = "Current date time stamp - ", $current_date
-#	Write-Output $log
+	Write-Output $log
 	
 	$logfile = $current_dir, "\", "AzureGR", $current_date, ".txt"
 	$logfile = [system.String]::Join("", $logfile)
 	$log = "Logfile set to - ", $logfile, "`n"
 	Clear-Content $logfile
-#	Write-Output $log
-#	$log | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
+	Write-Output $log
+	$log | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
+
+
+	$disclaimerFile = $current_dir, "\", "AzureDIS",".txt"
+	$disclaimerFile = [system.String]::Join("", $disclaimerFile)
+
+
 	
-	$reportfile = $current_dir, "\", "AzGRAudit", $current_date,".html"
+	$reportfile = $current_dir, "\", "AzGRAudit",".html"
     $reportfile = [system.String]::Join("", $reportfile)
     $log = "Report file set to - ", $reportfile, "`n"
-#	Write-Output $log
-#	$log | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
+	Write-Output $log
+	$log | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
 	
 	Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
     Set-Item ENV:ReportPath $current_dir
     Set-Item ENV:ReportName AzureGR
     $log = "ReportPath & ReportNames are set to - ", $ENV:ReportPath, $ENV:ReportName
-#    Write-Output $log
-#   	$log | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
+    Write-Output $log
+   	$log | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
 	
 	$inputfile = $current_dir, "\", "AzureGR.csv"
     $inputfile = [system.String]::Join("", $inputfile)
     $log = "inputfile set to - ", $inputfile, "`n"
-#    Write-Output $log
-#    $log | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
+    Write-Output $log
+    $log | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
 	
 	$ReportTitle = '30 Day Guardrail'
     
@@ -62,14 +68,14 @@ ScDc-PBMM CTO PolicyDesign     eea694af-ccb4-4ce4-9ca5-904708690694 4e1ed7ae-062
     Write-Host "Fetching data..."
     $csv = Import-Csv -Path $inputfile
 
-    
+# Arrays for storing compliance info    
 
 $compliantControls = @()
 $nonCompliantControls = @()
 $manualProcess = @()
-$remediation = @()
-$remediation1 = @()
-$finalRm = @()
+# $remediation = @()
+# $remediation1 = @()
+# $finalRm = @()
 
 $csv | % {
   if ([String]::IsNullOrEmpty($_.'audit procedure (Automatic)')){
@@ -81,7 +87,8 @@ $csv | % {
     $res = $res -join ("`r`n")
 
 Write-Output $res
-$res | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
+
+$res | Out-File -Encoding utf8 -FilePath $_.'Requirement ID'
 
     if ($_.'Check condition' -eq 'should contain'){
       if($res.Contains($_.'Expected Result (output of command)')){
@@ -108,42 +115,46 @@ $res | Out-File -Append -Force -Encoding utf8 -FilePath $logfile
     'Audit procedure (Manual)' = $_.'audit procedure (Manual)'
     'Audit procedure (Automatic)' = $_.'audit procedure (Automatic)'
     'Compliance Status' = $curPolState
-  } | Select 'RequirementID', 'Recommendation #', 'GR #', 'CONTROL #','CONTROL NAME', Title, Description, 'Rationale statement', 'Audit procedure (Manual)', 'Remediation', 'Audit procedure (Automatic)', 'Compliance Status'
+    'Evidence' = $_.'Evidence'
+  } | Select 'RequirementID', 'Recommendation #', 'GR #', 'CONTROL #','CONTROL NAME', Title, Description, 'Rationale statement', 'Audit procedure (Manual)', 'Remediation', 'Audit procedure (Automatic)', 'Compliance Status', 'Evidence'
 
   
 
   if ($curPolState -eq 'Non-compliant'){
-    $nonCompliantControls += $policyReportObj |  Select-Object -Property 'RequirementID',  'Recommendation #', 'GR #', 'CONTROL #','CONTROL NAME', Title, Description, 'Rationale statement', 'Audit procedure (Manual)', 'Audit procedure (Automatic)', 'Compliance Status'
+    $nonCompliantControls += $policyReportObj |  Select-Object -Property 'RequirementID',  'Recommendation #', 'GR #', 'CONTROL #','CONTROL NAME', Title, Description, 'Rationale statement', 'Audit procedure (Manual)', 'Audit procedure (Automatic)', 'Compliance Status', 'Evidence'
   } elseif ($curPolState -eq 'Compliant') {
-    $compliantControls += $policyReportObj |  Select-Object -Property 'RequirementID',  'Recommendation #', 'GR #', 'CONTROL #','CONTROL NAME', Title, Description, 'Rationale statement', 'Audit procedure (Manual)', 'Audit procedure (Automatic)', 'Compliance Status'
+    $compliantControls += $policyReportObj |  Select-Object -Property 'RequirementID',  'Recommendation #', 'GR #', 'CONTROL #','CONTROL NAME', Title, Description, 'Rationale statement', 'Audit procedure (Manual)', 'Audit procedure (Automatic)', 'Compliance Status', 'Evidence'
   } elseif ($curPolState -eq 'manual'){
-    $manualProcess += $policyReportObj |  Select-Object -Property 'RequirementID',  'Recommendation #', 'GR #', 'CONTROL #','CONTROL NAME', Title, Description, 'Rationale statement', 'Audit procedure (Manual)', 'Audit procedure (Automatic)', 'Compliance Status'
+    $manualProcess += $policyReportObj |  Select-Object -Property 'RequirementID',  'Recommendation #', 'GR #', 'CONTROL #','CONTROL NAME', Title, Description, 'Rationale statement', 'Audit procedure (Manual)', 'Audit procedure (Automatic)', 'Compliance Status', 'Evidence'
   }
 
-
-  $remediation += $policyReportObj.Remediation
-  $remediation1 += $policyReportObj.RequirementID
   
 
-  [int]$max = $remediation.Count
-if ([int]$remediation1.count -gt [int]$remediation.count) { $max = $remediation1.Count; }
+ # $remediation += $policyReportObj.Remediation
+ # $remediation1 += $policyReportObj.RequirementID
+  
+
+ # [int]$max = $remediation.Count
+ # if ([int]$remediation1.count -gt [int]$remediation.count) { $max = $remediation1.Count; }
  
-$finalRm = for ( $i = 0; $i -lt $max; $i++)
-{
-    Write-Verbose "$($remediation1[$i]),$($remediation[$i])"
-    [PSCustomObject]@{
-        RequirementID = $remediation1[$i]
-        Remediation = $remediation[$i]
+ # $finalRm = for ( $i = 0; $i -lt $max; $i++)
+ # {
+ #   Write-Verbose "$($remediation1[$i]),$($remediation[$i])"
+ #   [PSCustomObject]@{
+ #       RequirementID = $remediation1[$i]
+ #       Remediation = $remediation[$i]
  
-    }
-}
+ #   }
+ # }
 
 }
 
+
+# Report Generation
 
 $ImageLink = 'https://www.hc-sc.gc.ca/images/templates/wmms.gif'
 
-Dashboard -Name '30 Day Guardrail' -FilePath $reportfile -Show {
+Dashboard -Name '30 Day Guardrail' -FilePath $reportfile  {
 New-HTMLLogo -LeftLogoString $ImageLink
 
 TabOptions -SelectorColor AntiqueWhite -Transition -LinearGradient -SelectorColorTarget Red -BorderBackgroundColor Gold
@@ -157,17 +168,10 @@ TabOptions -SelectorColor AntiqueWhite -Transition -LinearGradient -SelectorColo
         }  
             
         }
-        Section -Name 'Supporting Documentation' -CanCollapse {
-            Section -Name 'All Remediation Steps' -CanCollapse {
+        Section -Name 'Disclaimer Information'  {
+            Section -Name 'Disclaimer'  {
             Panel {
-                Table -DataTable $finalRm -HideFooter
-                             
-            }
-            }
-
-            Section -Name 'Log File: Evidence' -CanCollapse {
-            Panel {
-                $Text = Get-Content -Path $LogFile
+                $Text = Get-Content -Path $disclaimerFile
 
                 Table -DataTable $Text -HideFooter
 
@@ -177,14 +181,30 @@ TabOptions -SelectorColor AntiqueWhite -Transition -LinearGradient -SelectorColo
     }
 
     Tab -Name 'Non-Compliant Controls'  {
-    Section -Name 'Non-Compliant Guardrail Controls' -CanCollapse {
+        Section -Name 'Non-Compliant Guardrail Controls' -CanCollapse {
         Panel {
             Table -DataTable $nonCompliantControls -HideFooter
         
         }
        
        }
+
+       Section -Name 'Disclaimer Information'  {
+         
+            Section -Name 'Disclaimer'  {
+            Panel {
+                $Text = Get-Content -Path $disclaimerFile
+
+                Table -DataTable $Text -HideFooter
+
+            }
+        }
+       }
     }
+
+  
+
+
     Tab -Name 'Manual Controls'  {
     Section -Name 'Manual Controls' -CanCollapse {
         Panel {
@@ -193,11 +213,51 @@ TabOptions -SelectorColor AntiqueWhite -Transition -LinearGradient -SelectorColo
         }
        
        }
-    }
+    
+    Section -Name 'Disclaimer Information'  {
+         
+            Section -Name 'Disclaimer'  {
+            Panel {
+                $Text = Get-Content -Path $disclaimerFile
 
+                Table -DataTable $Text -HideFooter
 
+            }
+        }
+       }
 }
+}
+#  Link Creation Code Block
 
 
+(Get-Content "$reportFile") | Foreach-Object {
+
+ 
+ $_ -replace "EAZ-L1-009", '<a href="./AZ-L1-013">Link</a>' `
+ -replace "EAZ-L1-012", '<a href="./AZ-L1-012">Link</a>' `
+ -replace "EAZ-L1-013", '<a href="./AZ-L1-013">Link</a>' `
+ -replace "EAZ-L1-028", '<a href="./AZ-L1-028">Link</a>' `
+ -replace "EAZ-L1-014", '<a href="./AZ-L1-014">Link</a>' `
+ -replace "EAZ-L1-021.1",'<a href="./AZ-L1-021.1">Link</a>' `
+ -replace "EAZ-L1-021.2", '<a href="./AZ-L1-021.2">Link</a>' `
+ -replace "EAZ-L1-022", '<a href="./AZ-L1-022">Link</a>' `
+ -replace "EAZ-L1-027",'<a href="./AZ-L1-027">Link</a>' `
+ -replace "EAZ-L1-032",'<a href="./AZ-L1-032">Link</a>' `
+ -replace "EAZ-L1-033", '<a href="./AZ-L1-033">Link</a>' `
+ -replace "EAZ-L1-045", '<a href="./AZ-L1-045">Link</a>' `
+ -replace "EAZ-L1-047", '<a href="./AZ-L1-047">Link</a>' `
+ -replace "EAZ-L1-048", '<a href="./AZ-L1-048">Link</a>' `
+ -replace "EAZ-L1-051", '<a href="./AZ-L1-051">Link</a>' `
+ -replace "EAZ-L1-066", '<a href="./AZ-L1-066">Link</a>' `
+ -replace "EAZ-L1-068", '<a href="./AZ-L1-068">Link</a>' `
+ -replace "EAZ-L1-069", '<a href="./AZ-L1-069">Link</a>' `
+ -replace "EAZ-L1-001", '<a href="./AZ-L1-001">Link</a>' `
+ -replace "EAZ-L1-067", '<a href="./AZ-L1-067">Link</a>' `
+ -replace "EAZ-L1-063", '<a href="./AZ-L1-063">Link</a>' `
+ -replace "EAZ-L1-064", '<a href="./AZ-L1-064">Link</a>' 
+
+  
+ } |
+ Set-Content $reportFile
 
  

@@ -1,0 +1,6 @@
+﻿container: grtest02 is non-compliant
+container: scpccsacontainer is compliant
+container: grtest01 is compliant
+container: sqldbauditlogs is compliant
+container: vulnerability-assessment is compliant
+

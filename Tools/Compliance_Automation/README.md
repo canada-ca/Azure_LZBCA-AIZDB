@@ -5,6 +5,13 @@ The collected evidence is extremely detailed and feeds directly into acceleratio
 
 The script generates HTML based evidence report for guardrails policy implementations. Please change ENV variables and Subscription ID before executing the script. 
 
+# Powershell Prerequisites
+These modules must be installed to run the tool.
+* Az [Install-Module -Name Az -AllowClobber -Scope CurrentUser]
+* PSWriteHTML
+* MSolService (This is required to verify Multi factor Authentication) 
+The tool requires Azure login via 'az login' prior to execution. 
+
 # Existing Features
 
 * Covers validation gaps in Azure portal compliance tools
@@ -18,9 +25,10 @@ The script generates HTML based evidence report for guardrails policy implementa
 
 The tool can be invoked for any Azure subscription in any tenant. There are plans in place to introduce the following advanced features in the near future.
 
-* Multi-tenant multi-subscription wrapper
+* Multi-tenant multi-subscription wrapper - can be integrated into automated monitoring systems
+* Integrated email reports for non-compliant tenants / subscriptions
 * PowerBI analysis across multiple reports including trend identification
-* Extensible to 90 and 180 days guardrails, including Office365
+* To be extended to full PBMM guardrails controls
 * Can be integrated into Cloud Management Platform tools and scheduled automation tasks
 
 # Potential clients

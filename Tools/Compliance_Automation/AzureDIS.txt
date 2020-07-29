@@ -1,0 +1,1 @@
+This tool extracts evidence for specific [automation eligible] controls of the 30 day guardrails / PBMM compliance and provides remediation steps as needed. The tool does not provide full coverage of all 30 day guardrails. The output of this tab can be exported as pdf and digitally annotated with checkmarks and signature for purposes of official record keeping.
