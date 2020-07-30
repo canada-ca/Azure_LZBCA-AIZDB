@@ -233,13 +233,13 @@ Dashboard -Name '30 Day Guardrail' -FilePath $reportfile {
 (Get-Content "$reportFile") | ForEach-Object {
 
 
-  $_ -replace "EAZ-L1-009",'<a href="./AZ-L1-013">Link</a>' `
+  $_ -replace "EAZ-L1-009",'<a href="./AZ-L1-009">Link</a>' `
      -replace "EAZ-L1-012",'<a href="./AZ-L1-012">Link</a>' `
      -replace "EAZ-L1-013",'<a href="./AZ-L1-013">Link</a>' `
      -replace "EAZ-L1-028",'<a href="./AZ-L1-028">Link</a>' `
      -replace "EAZ-L1-014",'<a href="./AZ-L1-014">Link</a>' `
-     -replace "EAZ-L1-021.1",'<a href="./AZ-L1-021.1">Link</a>' `
-     -replace "EAZ-L1-021.2",'<a href="./AZ-L1-021.2">Link</a>' `
+     -replace "EAZ-L1-021a",'<a href="./AZ-L1-021a">Link</a>' `
+     -replace "EAZ-L1-021b",'<a href="./AZ-L1-021b">Link</a>' `
      -replace "EAZ-L1-022",'<a href="./AZ-L1-022">Link</a>' `
      -replace "EAZ-L1-027",'<a href="./AZ-L1-027">Link</a>' `
      -replace "EAZ-L1-032",'<a href="./AZ-L1-032">Link</a>' `
@@ -252,7 +252,7 @@ Dashboard -Name '30 Day Guardrail' -FilePath $reportfile {
      -replace "EAZ-L1-068",'<a href="./AZ-L1-068">Link</a>' `
      -replace "EAZ-L1-069",'<a href="./AZ-L1-069">Link</a>' `
      -replace "EAZ-L1-001",'<a href="./AZ-L1-001">Link</a>' `
-     -replace "EAZ-L1-067",'<a href="./AZ-L1-067">Link</a>' `
+     -replace "EAZ-L1-002",'<a href="./AZ-L1-002">Link</a>' `
      -replace "EAZ-L1-063",'<a href="./AZ-L1-063">Link</a>' `
      -replace "EAZ-L1-064",'<a href="./AZ-L1-064">Link</a>'
 
