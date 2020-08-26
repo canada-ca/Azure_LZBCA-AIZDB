@@ -7,6 +7,12 @@ The script generates HTML based evidence report for guardrails policy implementa
 
 To effectively read all subscriptions in any given tenant, it is recommended that the user of this tool have Global Reader role.
 
+# Contact
+
+Please contact the following persons to provide feedback on the tool including feature requests and bug reports - 
+* tarek.ali@canada.ca
+* sunil.sethi@canada.ca
+
 # Powershell Prerequisites
 
 These modules must be installed to run the tool.
