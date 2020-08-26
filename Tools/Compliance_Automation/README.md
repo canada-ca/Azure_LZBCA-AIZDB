@@ -8,11 +8,21 @@ The script generates HTML based evidence report for guardrails policy implementa
 To effectively read all subscriptions in any given tenant, it is recommended that the user of this tool have Global Reader role.
 
 # Powershell Prerequisites
+
 These modules must be installed to run the tool.
-* Az [Install-Module -Name Az -AllowClobber -Scope CurrentUser]
+* Az 
 * PSWriteHTML
 * MSolService (This is required to verify Multi factor Authentication) 
-The tool requires Azure login via 'az login' prior to execution. 
+
+Sample command in PowerShell - Install-Module -Name Az -AllowClobber -Scope CurrentUser
+
+# Instructions
+
+* The tool requires Azure login via 'az login' prior to execution. 
+* Ensure all the PowerShell modules above are installed 
+* Fill out your tenant and subscription access data within the file TenantsGRUpdated.csv
+* Run the script WGRLatest.ps1 to begin a multi-tenant scan.
+* Reports will be created in the same folder in a 2 level hierarchy - tenant at top level then individual subscription folders
 
 # Existing Features
 
